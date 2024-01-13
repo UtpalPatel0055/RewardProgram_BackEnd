@@ -14,19 +14,27 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Transaction")
+@Table(name="transaction")
 public class Transaction {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "tr_id")
 	private int trId;
+
+    @Column(name = "tr_time")
     private LocalDateTime trTime;
+
     @OneToOne
     private Reward reward;
+
+    @Column(name = "amount")
     private int amount;
+
 	@ManyToOne
     @JoinColumn(name = "relationId")
     private StoreCustomerRelation storeCustomerRelation;
+
     @ManyToOne
     @JoinColumn(name = "merchantId")
     private Merchant merchant;

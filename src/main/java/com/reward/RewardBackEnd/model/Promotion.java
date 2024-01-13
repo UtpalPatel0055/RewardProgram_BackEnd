@@ -15,16 +15,27 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Promotion")
+@Table(name="promotion")
 public class Promotion {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "promo_id")
 	private int promoId;
+
+	@Column(name = "promo_name")
 	private String promoName;
+
+	@Column(name = "promo_description")
 	private String promoDescription;
+
+	@Column(name = "create_on")
 	private LocalDate createdOn;
+
+	@Column(name = "expires_on")
 	private LocalDate expiresOn;
+
+
 	@ManyToOne
 	@JoinColumn(name = "storeId")
 	private Store store;

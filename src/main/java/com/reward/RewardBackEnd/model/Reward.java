@@ -14,14 +14,21 @@ import java.time.LocalDate;
 @AllArgsConstructor
 
 @Entity
-@Table(name="Rewards")
+@Table(name="rewards")
 public class Reward {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "reward_id")
 	private int rewardId;
+
+    @Column(name = "reward_name")
     private String rewardName;
+
+    @Column(name = "reward_type")
     private String rewardType;
+
+    @Column(name = "reward_target")
     private int rewardTarget;
 
     @ManyToOne
@@ -32,6 +39,7 @@ public class Reward {
     @JoinColumn(name = "merchantId")
     private Merchant merchant;
 
+    @Column(name = "created_on")
     private LocalDate createdOn;
 
 }
