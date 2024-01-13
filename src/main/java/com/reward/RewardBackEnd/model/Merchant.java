@@ -1,10 +1,6 @@
 package com.reward.RewardBackEnd.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
+@Table(name="Merchant")
 public class Merchant {
 	
 	@Id
@@ -33,7 +30,11 @@ public class Merchant {
     @Column(unique = true)
     private String username;
     private String password;
-    private int storeId;
+
+	private String jobTitle;
+	@ManyToOne
+	@JoinColumn(name = "storeId")
+	private Store store;
 
 	
 }

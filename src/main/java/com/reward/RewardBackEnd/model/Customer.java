@@ -1,12 +1,10 @@
 package com.reward.RewardBackEnd.model;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
+@Table(name="Customer")
 public class Customer {
 	
 	@Id
@@ -25,23 +24,21 @@ public class Customer {
 	private int custId;
 	private String custFirstName;
 	private String custLastName;
-	
 	@Column(unique = true)
 	private String custEmail;
-	
 	@Column(unique = true)
 	private String custPhone;
-	
-	private int points;
+	@Column(name="points")
+	private int currPoints;		//This is for Current points
 	private String custBroadCastChoice;
 	private int totalSpent;
-	private Date joinDate;
-	private Date lastPurchase;
+	private LocalDate joinDate;
+	private LocalDate lastPurchase;
 	private String status;
-	
 	@Column(unique = true)
 	private String username;
     private String password;
-	
+	@OneToMany(mappedBy = "Customer")
+	private List<StoreCustomerRelation> storeCustomerRelation;
 	
 }

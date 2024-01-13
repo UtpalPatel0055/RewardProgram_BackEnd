@@ -2,10 +2,7 @@ package com.reward.RewardBackEnd.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,15 +14,20 @@ import lombok.Setter;
 @AllArgsConstructor
 
 @Entity
+@Table(name="Transaction")
 public class Transaction {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int trId;
     private LocalDateTime trTime;
-    private int relationId;
-    private int rewardId;
+    @OneToOne
+    private Reward reward;
     private int amount;
-    
-	
+	@ManyToOne
+    @JoinColumn(name = "relationId")
+    private StoreCustomerRelation storeCustomerRelation;
+    @ManyToOne
+    @JoinColumn(name = "merchantId")
+    private Merchant merchant;
 }

@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RewardBackEndApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(RewardBackEndApplication.class, args);
 	}
-
 }
