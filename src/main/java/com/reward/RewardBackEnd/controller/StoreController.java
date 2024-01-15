@@ -1,20 +1,33 @@
 package com.reward.RewardBackEnd.controller;
 
-import java.util.Optional;
+import com.reward.RewardBackEnd.exception.APIErrorDetail;
+import com.reward.RewardBackEnd.exception.APIExceptionHandler;
+import com.reward.RewardBackEnd.exception.save.DuplicateRecordFoundException;
+import com.reward.RewardBackEnd.model.Store;
+import com.reward.RewardBackEnd.service.StoreService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.reward.RewardBackEnd.model.Customer;
+import java.time.LocalDateTime;
 
 @RestController
+@RequestMapping("/api/v1/")
 public class StoreController {
 
-	@GetMapping("/store/Customers/{storeId}")
-	public Optional<Customer> getCustomerByStoreId(@PathVariable int storeId) {
-		return Optional.empty();
-	}
-	
-	
+    @Autowired
+    private StoreService storeService;
+
+    @PostMapping("/create-store-profile")
+	public ResponseEntity<Store> createNewStore(@RequestBody Store store) {
+        try {
+            Store createdStore = storeService.saveStore(store);
+            return new ResponseEntity<Store>(createdStore, HttpStatus.CREATED);
+        } catch {
+            
+        }
+
+
+    }
 }
