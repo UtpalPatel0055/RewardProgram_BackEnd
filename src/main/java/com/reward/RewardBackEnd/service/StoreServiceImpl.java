@@ -1,7 +1,7 @@
 package com.reward.RewardBackEnd.service;
 
+import com.reward.RewardBackEnd.exception.save.DuplicateRecordFoundException;
 import com.reward.RewardBackEnd.model.Store;
-import com.reward.RewardBackEnd.exception.save.DuplicateStoreException;
 import com.reward.RewardBackEnd.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class StoreServiceImpl implements StoreService {
         if(flag) {
             storeRepository.save(store);
         } else {
-            throw new DuplicateStoreException("The store already exists.");
+            throw new DuplicateRecordFoundException("The store already exists.");
         }
         return store;
     }

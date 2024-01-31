@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/stores")
 public class StoreController {
 
     @Autowired
@@ -24,10 +24,8 @@ public class StoreController {
         try {
             Store createdStore = storeService.saveStore(store);
             return new ResponseEntity<Store>(createdStore, HttpStatus.CREATED);
-        } catch {
-            
+        } catch(Exception e) {
+            throw e;
         }
-
-
     }
 }

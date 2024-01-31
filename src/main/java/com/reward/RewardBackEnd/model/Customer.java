@@ -1,62 +1,87 @@
 package com.reward.RewardBackEnd.model;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 
 @Entity
 @Table(name="customer")
-public class Customer {
+public class Customer implements UserDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "cust_id")
 	private int custId;
 
-	@Column(name = "cust_first_name")
 	private String custFirstName;
 
-	@Column(name = "cust_last_name")
 	private String custLastName;
 
-	@Column(name = "cust_email", unique = true)
 	private String custEmail;
 
-	@Column(name = "cust_phone", unique = true)
 	private String custPhone;
 
-	@Column(name="points")
 	private int currPoints;		//This is for Current points
 
-	@Column(name = "cust_broad_cast_choice")
 	private String custBroadCastChoice;
 
-	@Column(name = "total_spent")
 	private int totalSpent;
 
-	@Column(name = "join_date")
 	private LocalDate joinDate;
 
-	@Column(name = "last_purchase")
 	private LocalDate lastPurchase;
 
-	@Column(name = "status")
 	private String status;
 
-	@Column(name = "username", unique = true)
-	private String username;
+//	private String username;
 
-	@Column(name = "password")
     private String password;
 
 	@OneToMany(mappedBy = "customer")
 	private List<StoreCustomerRelation> storeCustomerRelation;
+
+	@Enumerated(EnumType.STRING)
+	private Role role;
+
+	// METHODS FOR PROVIDING SECURITY
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(role.name()));
+	}
+
+	@Override
+	public String getUsername() {
+		return this.custEmail;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
+	//END OF SECURITY METHODS
 
 }

@@ -1,24 +1,18 @@
 package com.reward.RewardBackEnd.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
+
 @Entity
 @Table(name="store_customer_relation")
 public class StoreCustomerRelation {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "relation_id")
 	private int relationId;
 
 	@ManyToOne
