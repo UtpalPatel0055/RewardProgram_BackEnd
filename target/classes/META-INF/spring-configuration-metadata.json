@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "rsa",
+      "type": "com.reward.RewardBackEnd.config.RsaKeyProperties",
+      "sourceType": "com.reward.RewardBackEnd.config.RsaKeyProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "rsa.private-key",
+      "type": "java.security.interfaces.RSAPrivateKey",
+      "sourceType": "com.reward.RewardBackEnd.config.RsaKeyProperties"
+    },
+    {
+      "name": "rsa.public-key",
+      "type": "java.security.interfaces.RSAPublicKey",
+      "sourceType": "com.reward.RewardBackEnd.config.RsaKeyProperties"
+    }
+  ],
+  "hints": []
+}

@@ -1,8 +1,9 @@
-package com.reward.RewardBackEnd.service;
+package com.reward.RewardBackEnd.service.impl;
 
-import com.reward.RewardBackEnd.exception.save.DuplicateRecordFoundException;
+import com.reward.RewardBackEnd.exception.DuplicateRecordFoundException;
 import com.reward.RewardBackEnd.model.Store;
 import com.reward.RewardBackEnd.repository.StoreRepository;
+import com.reward.RewardBackEnd.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

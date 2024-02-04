@@ -1,7 +1,5 @@
 package com.reward.RewardBackEnd.exception;
 
-import com.reward.RewardBackEnd.exception.notFound.UserNotFoundException;
-import com.reward.RewardBackEnd.exception.save.DuplicateRecordFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

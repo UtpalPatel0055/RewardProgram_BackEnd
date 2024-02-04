@@ -1,6 +1,6 @@
 package com.reward.RewardBackEnd.model;
 
 public enum Role {
-    Merchant,
-    Customer
+    ROLE_MERCHANT,
+    ROLE_CUSTOMER
 }
