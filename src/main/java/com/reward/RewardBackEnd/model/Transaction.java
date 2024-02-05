@@ -13,14 +13,14 @@ import lombok.*;
 public class Transaction {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int trId;
+	private Integer trId;
 
     private LocalDateTime trTime;
 
     @OneToOne
     private Reward reward;
 
-    private int amount;
+    private Integer amount;
 
 	@ManyToOne
     @JoinColumn(name = "relationId")

@@ -1,6 +1,7 @@
 package com.reward.RewardBackEnd.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import lombok.*;
 public class Store {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int storeId;
+	private Integer storeId;
 
 	private String busName;
 
@@ -30,7 +31,7 @@ public class Store {
 
 	private String address2;
 
-	private int postcode;
+	private Integer postcode;
 
 	private String city;
 
@@ -38,9 +39,9 @@ public class Store {
 
 	private String country;
 
-	private LocalDate joinDate;
+	private LocalDateTime joinDate;
 
-	@OneToMany(mappedBy = "store")
+	@OneToMany(mappedBy = "store", fetch = FetchType.EAGER)
 	private List<StoreCustomerRelation> storeCustomerRelation;
 	
 }

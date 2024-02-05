@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -13,13 +14,13 @@ import java.time.LocalDate;
 public class Reward {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int rewardId;
+	private Integer rewardId;
 
     private String rewardName;
 
     private String rewardType;
 
-    private int rewardTarget;
+    private Integer rewardTarget;
 
     @ManyToOne
     @JoinColumn(name = "storeId")
@@ -30,6 +31,6 @@ public class Reward {
     private Merchant merchant;
 
     @Column(name = "created_on")
-    private LocalDate createdOn;
+    private LocalDateTime createdOn;
 
 }

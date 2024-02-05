@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -13,16 +14,16 @@ import java.time.LocalDate;
 public class StoreCustomerRelation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int relationId;
+	private Integer relationId;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "storeId")
 	private Store store;
 
-	@ManyToOne
-	@JoinColumn(name = "custId")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "customerId")
 	private Customer customer;
 
 	@Column(name = "join_date")
-	private LocalDate joinDate;
+	private LocalDateTime joinDate;
 }

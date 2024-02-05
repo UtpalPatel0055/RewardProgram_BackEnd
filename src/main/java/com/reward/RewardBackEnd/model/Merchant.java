@@ -6,42 +6,52 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-
+@AllArgsConstructor
 @Entity
-@Table(name="merchant")
+@Table(name = "Merchant")
 public class Merchant implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int merchantId;
+	private Integer merchantId;
 
-	private String firstName;
+	private String merchantFirstName;
 
-	private String lastName;
+	private String merchantLastName;
 
-    private String merchantPhone;
+	private String merchantEmail;
 
-    private String merchantEmail;
+	private String password;
 
-    private String password;
+	private String merchantPhone;
 
-	private String jobTitle;
-
-	@ManyToOne
-	@JoinColumn(name = "storeId")
-	private Store store;
+	private LocalDateTime joinDate;
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	// METHODS FOR PROVIDING SECURITY
+	private String jobTitle;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "storeId")
+	private Store store;
+
+	public Merchant(Merchant merchant) {
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority(role.name()));
+	}
+
+	@Override
+	public String getPassword() {
+		return this.password;
 	}
 
 	@Override
@@ -68,5 +78,4 @@ public class Merchant implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-	//END OF SECURITY METHODS
 }
