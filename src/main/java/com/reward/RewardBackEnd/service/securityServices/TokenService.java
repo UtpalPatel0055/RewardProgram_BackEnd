@@ -1,5 +1,7 @@
 package com.reward.RewardBackEnd.service.securityServices;
 
+import com.reward.RewardBackEnd.model.Customer;
+import com.reward.RewardBackEnd.model.Merchant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,20 +18,37 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TokenService {
 
-//    private final JwtEncoder jwtEncoder;
-//
-//    public String generateToken(Authentication authentication) {
-//        Instant now = Instant.now();
-//        String scope = authentication.getAuthorities().stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .collect(Collectors.joining(" "));
-//        JwtClaimsSet claims = JwtClaimsSet.builder()
-//                .issuer("self")
-//                .issuedAt(now)
-//                .expiresAt(now.plus(1, ChronoUnit.HOURS))
-//                .subject(authentication.getName())
-//                .claim("scope", scope)
-//                .build();
-//        return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
-//    }
+    private final JwtEncoder jwtEncoder;
+
+    public String generateToken(Customer customer) {
+        Instant now = Instant.now();
+        String scope = customer.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(" "));
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer("self")
+                .issuedAt(now)
+                .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                .subject(customer.getCustEmail())
+                .claim("scope", scope)
+                .build();
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+    public String generateToken(Merchant merchant) {
+        Instant now = Instant.now();
+        String scope = merchant.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(" "));
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer("self")
+                .issuedAt(now)
+                .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                .subject(merchant.getMerchantEmail())
+                .claim("scope", scope)
+                .build();
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+
 }

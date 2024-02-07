@@ -1,5 +1,7 @@
 package com.reward.RewardBackEnd.controller;
 
+import com.reward.RewardBackEnd.model.Customer;
+import com.reward.RewardBackEnd.model.Merchant;
 import com.reward.RewardBackEnd.service.securityServices.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.LoggerFactory;
@@ -15,18 +17,26 @@ public class AuthController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
 
-//    private final TokenService tokenService;
+    private final TokenService tokenService;
 
     @GetMapping("/")
     public String home() {
         return "Hello, Papa";
     }
 
-    @PostMapping("/token")
-    public String token(Authentication authentication) {
-//        LOG.debug("Token requested for user: " + authentication.getName());
-//        String token = tokenService.generateToken(authentication);
-//        LOG.debug("Token granted: " + token);
-        return "Token has been generated";
+    @PostMapping("/customers/token")
+    public String tokenCustomer(Customer customer) {
+        LOG.debug("Token requested for user: ", customer.getCustEmail());
+        String token = tokenService.generateToken(customer);
+        LOG.debug("Token granted: " + token);
+        return token;
+    }
+
+    @PostMapping("/merchants/token")
+    public String tokenMerchant(Merchant merchant) {
+        LOG.debug("Token requested for user: ", merchant.getMerchantEmail());
+        String token = tokenService.generateToken(merchant);
+        LOG.debug("Token granted: " + token);
+        return token;
     }
 }

@@ -39,11 +39,11 @@ public class Customer implements UserDetails{
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	private Integer currPoints;		//This is for Current points
+	private Integer currPoints = 0;		//This is for Current points
 
 	private String custBroadCastChoice;
 
-	private Integer totalSpent;
+	private Integer totalSpent = 0;
 
 	private LocalDateTime lastPurchase;
 
