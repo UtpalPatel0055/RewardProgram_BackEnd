@@ -12,4 +12,20 @@ public class RewardBackEndApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RewardBackEndApplication.class, args);
 	}
+
+//	@Bean
+//	CommandLineRunner commandLineRunner(PasswordEncoder passwordEncoder, MerchantRepository userRepository) {
+//		return args -> {
+//			Merchant user = new Merchant();
+//			user.setRole("ROLE_MERCHANT");
+//			user.setPhone("987");
+//			user.setLastName("Patel");
+//			user.setFirstName("Utpal");
+//			user.setEmail("utpal");
+//			user.setPassword(passwordEncoder.encode("password"));
+//
+//			userRepository.save(user);
+//		};
+//	}
+
 }

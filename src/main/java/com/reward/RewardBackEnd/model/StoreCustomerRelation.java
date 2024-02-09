@@ -20,8 +20,8 @@ public class StoreCustomerRelation {
 	private Store store;
 
 	@ManyToOne
-	@JoinColumn(name = "custId")
-	private Customer customer;
+	@JoinColumn(name = "userId")
+	private User user;
 
 	@Column(name = "join_date")
 	private LocalDate joinDate;

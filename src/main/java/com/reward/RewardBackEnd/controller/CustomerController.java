@@ -1,7 +1,9 @@
 package com.reward.RewardBackEnd.controller;
 
+import com.reward.RewardBackEnd.model.AuthenticationResponse;
 import com.reward.RewardBackEnd.model.Customer;
 import com.reward.RewardBackEnd.service.CustomerService;
+import com.reward.RewardBackEnd.service.securityServices.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,15 +13,17 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CustomerController {
 
+    private final TokenService tokenService;
+
     private final CustomerService customerService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity signUp(@RequestBody Customer customer) {
+    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody Customer customer) {
         return null;
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody Object obj) {
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody Object obj) {
         return null;
     }
 
@@ -27,4 +31,6 @@ public class CustomerController {
     public String dashboard() {
         return "Customer Dashboard";
     }
+
+
 }

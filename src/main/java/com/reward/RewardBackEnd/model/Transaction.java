@@ -1,9 +1,10 @@
 package com.reward.RewardBackEnd.model;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -27,6 +28,6 @@ public class Transaction {
     private StoreCustomerRelation storeCustomerRelation;
 
     @ManyToOne
-    @JoinColumn(name = "merchantId")
-    private Merchant merchant;
+    @JoinColumn(name = "userId")
+    private User user;
 }

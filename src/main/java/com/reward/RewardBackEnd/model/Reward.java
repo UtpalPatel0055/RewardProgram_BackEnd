@@ -26,8 +26,8 @@ public class Reward {
     private Store store;
 
     @ManyToOne
-    @JoinColumn(name = "merchantId")
-    private Merchant merchant;
+    @JoinColumn(name = "userId")
+    private User user;
 
     @Column(name = "created_on")
     private LocalDate createdOn;

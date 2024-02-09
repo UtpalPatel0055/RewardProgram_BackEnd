@@ -23,6 +23,17 @@ public class TokenService {
         String scope = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
+
+        // Java Traditional code //
+//        List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
+//        StringBuilder scopeBuilder = new StringBuilder();
+//        for (GrantedAuthority authority : authorities) {
+//            String authorityName = authority.getAuthority();
+//            scopeBuilder.append(authorityName).append(" ");
+//        }
+//        String scope = scopeBuilder.toString().trim();
+        // End //
+
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
@@ -32,4 +43,5 @@ public class TokenService {
                 .build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
+
 }
