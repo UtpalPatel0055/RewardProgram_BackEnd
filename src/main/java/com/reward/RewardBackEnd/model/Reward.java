@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-
 @Entity
 @Table(name="rewards")
 public class Reward {

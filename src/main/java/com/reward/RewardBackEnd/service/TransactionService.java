@@ -1,5 +1,5 @@
 package com.reward.RewardBackEnd.service;
 
-public interface MerchantService {
+public interface TransactionService {
 
 }

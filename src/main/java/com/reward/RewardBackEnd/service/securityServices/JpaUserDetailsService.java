@@ -1,4 +1,4 @@
-package com.reward.RewardBackEnd.service;
+package com.reward.RewardBackEnd.service.securityServices;
 
 import com.reward.RewardBackEnd.model.SecurityUser;
 import com.reward.RewardBackEnd.repository.UserRepository;

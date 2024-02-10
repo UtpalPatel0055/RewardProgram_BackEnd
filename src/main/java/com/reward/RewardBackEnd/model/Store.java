@@ -1,14 +1,14 @@
 package com.reward.RewardBackEnd.model;
 
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 @Data
 @NoArgsConstructor
-
 @Entity
 @Table(name="store")
 public class Store {

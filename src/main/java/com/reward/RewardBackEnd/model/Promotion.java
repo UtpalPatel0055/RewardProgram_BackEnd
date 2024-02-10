@@ -8,7 +8,6 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-
 @Entity
 @Table(name="promotion")
 public class Promotion {

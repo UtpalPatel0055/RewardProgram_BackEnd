@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-
 @Entity
 @Table(name="store_customer_relation")
 public class StoreCustomerRelation {

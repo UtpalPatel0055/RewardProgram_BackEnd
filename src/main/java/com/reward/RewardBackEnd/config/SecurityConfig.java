@@ -6,7 +6,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.reward.RewardBackEnd.service.JpaUserDetailsService;
+import com.reward.RewardBackEnd.service.securityServices.JpaUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,24 +55,12 @@ public class SecurityConfig {
                 .oauth2ResourceServer((oauth2) -> oauth2
                         .jwt(Customizer.withDefaults())
                 )
-//                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-//                .userDetailsService(jpaUserDetailsService)
                 .exceptionHandling((ex) -> ex
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                 )
                 .build();
     }
-
-//    @Bean
-//    public InMemoryUserDetailsManager user() {
-//        return new InMemoryUserDetailsManager(
-//                User.withUsername("pdpatel")
-//                        .password("{noop}password")
-//                        .authorities("read")
-//                        .build()
-//        );
-//    }
 
     @Bean
     public AuthenticationManager authManager(UserDetailsService userDetailsService) {
