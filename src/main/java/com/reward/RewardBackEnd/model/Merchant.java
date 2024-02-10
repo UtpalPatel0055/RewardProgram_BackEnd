@@ -10,9 +10,6 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "Merchant")
 public class Merchant implements UserDetails {
@@ -41,6 +38,10 @@ public class Merchant implements UserDetails {
 	@JoinColumn(name = "storeId")
 	private Store store;
 
+	public Merchant() {
+
+	}
+
 	public Merchant(Merchant merchant) {
 	}
 
@@ -49,10 +50,6 @@ public class Merchant implements UserDetails {
 		return List.of(new SimpleGrantedAuthority(role.name()));
 	}
 
-	@Override
-	public String getPassword() {
-		return this.password;
-	}
 
 	@Override
 	public String getUsername() {
@@ -77,5 +74,77 @@ public class Merchant implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	//Getter and Setter
+	public Integer getMerchantId() {
+		return merchantId;
+	}
+//	public void setMerchantId(Integer merchantId) {
+//		this.merchantId = merchantId;
+//	}
+
+	public String getMerchantFirstName() {
+		return merchantFirstName;
+	}
+	public void setMerchantFirstName(String merchantFirstName) {
+		this.merchantFirstName = merchantFirstName;
+	}
+
+	public String getMerchantLastName() {
+		return merchantLastName;
+	}
+	public void setMerchantLastName(String merchantLastName) {
+		this.merchantLastName = merchantLastName;
+	}
+
+	public String getMerchantEmail() {
+		return merchantEmail;
+	}
+	public void setMerchantEmail(String merchantEmail) {
+		this.merchantEmail = merchantEmail;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	@Override
+	public String getPassword() {
+		return this.password;
+	}
+
+	public String getMerchantPhone() {
+		return merchantPhone;
+	}
+	public void setMerchantPhone(String merchantPhone) {
+		this.merchantPhone = merchantPhone;
+	}
+
+	public LocalDateTime getJoinDate() {
+		return joinDate;
+	}
+	public void setJoinDate(LocalDateTime joinDate) {
+		this.joinDate = joinDate;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public String getJobTitle() {
+		return jobTitle;
+	}
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
+
+	public Store getStore() {
+		return store;
+	}
+	public void setStore(Store store) {
+		this.store = store;
 	}
 }

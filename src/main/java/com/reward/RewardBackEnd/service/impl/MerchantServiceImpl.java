@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,7 +42,7 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public AuthenticationResponse register(Merchant m) {
-        LOG.info(" === Inside Merchant Service === ");
+        LOG.info(" === Inside Merchant Service to register === ");
         LOG.info(" === Merchant : === " + m.getMerchantEmail() + " and " + m.getPassword());
         LOG.info(" === ======================= === ");
 
@@ -55,7 +56,6 @@ public class MerchantServiceImpl implements MerchantService {
         merchant.setJobTitle(m.getJobTitle());
 //        merchant.setJoinDate();
 
-
         merchantRepository.save(merchant);
         String token = jwtService.generateToken(merchant);
 
@@ -64,27 +64,41 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public AuthenticationResponse authenticate(Merchant merchant) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        merchant.getMerchantEmail(),
-                        merchant.getPassword()
-                )
-        );
-        Merchant merchant1 = merchantRepository.findByMerchantEmail(merchant.getUsername()).orElseThrow();
-        String token = jwtService.generateToken(merchant1);
-
-        return new AuthenticationResponse(token);
+        LOG.info(" === Inside Merchant Service Impl to AUTHENTICATE === ");
+        LOG.info(" === Merchant Email: === " + merchant.getMerchantEmail() + " and Password: " + merchant.getPassword());
+        LOG.info(" === ======================= === ");
+        try{
+            UsernamePasswordAuthenticationToken userToken = new UsernamePasswordAuthenticationToken(merchant.getUsername(), merchant.getPassword());
+            LOG.info("+++ UsernamePasswordAuthenticationToken passed +++");
+            authenticationManager.authenticate(userToken);
+            LOG.info("+++ Authentication Manager passed +++");
+        } catch (AuthenticationException e) {
+            LOG.info(" +++ EXCEPTION +++ " + e.getMessage());
+            LOG.error(" +++ EXCEPTION +++ " + e.getMessage());
+            throw new RuntimeException("Authentication failed", e);
+        }
+        LOG.info(" === AUTHENTICATION MANAGER HAS BEEN PASSED === ");
+        LOG.info(" === Now, trying to log-in === ");
+//        Merchant merchant1 = merchantRepository.findByMerchantEmail(merchant.getUsername()).orElseThrow();
+        Optional<Merchant> merchant1 = merchantRepository.findByMerchantEmail(merchant.getUsername());
+        if(merchant1.isPresent()) {
+            LOG.info(" === SUCCESSFULLY FOUND Merchant TO LOGIN === " + merchant1.get().getMerchantEmail() + " and " + merchant1.get().getPassword());
+            String token = jwtService.generateToken(merchant1.get());
+            return new AuthenticationResponse(token);
+        }
+        LOG.info("========== No MERCHANT is found for LOGGING IN ==========");
+        throw new UsernameNotFoundException("No MERCHANT is found for LOGGING IN");
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        LOG.info("==== Inside JPA-Customer-User-Details ====" + username);
-        LOG.info(" user details Email: " + merchantRepository.findByMerchantEmail(username));
-        LOG.info(" user details Password: " + merchantRepository.findByMerchantEmail(username).get().getPassword());
+    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+        LOG.info("==== Inside JPA-Customer-User-Details ====" + userEmail);
+        LOG.info(" Merchant details Email: " + merchantRepository.findByMerchantEmail(userEmail));
+        LOG.info(" Merchant details Password: " + merchantRepository.findByMerchantEmail(userEmail).get().getPassword());
         LOG.info("==========================================");
         return merchantRepository
-                .findByMerchantEmail(username)
+                .findByMerchantEmail(userEmail)
                 .map(Merchant::new)
-                .orElseThrow(() -> new UsernameNotFoundException("Merchant not found through repo" + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Merchant not found through repo" + userEmail));
     }
 }

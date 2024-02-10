@@ -1,5 +1,6 @@
 package com.reward.RewardBackEnd.config;
 
+import com.reward.RewardBackEnd.controller.MerchantController;
 import com.reward.RewardBackEnd.service.MerchantService;
 import com.reward.RewardBackEnd.service.securityServices.JwtService;
 import com.sun.istack.NotNull;
@@ -8,6 +9,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +35,8 @@ public class JwtMerchantAuthenticationFilter extends OncePerRequestFilter
         this.merchantService = merchantService;
     }
 
+    private static final Logger LOG = LoggerFactory.getLogger(JwtMerchantAuthenticationFilter.class);
+
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
                                     @NotNull HttpServletResponse response,
@@ -46,17 +51,15 @@ public class JwtMerchantAuthenticationFilter extends OncePerRequestFilter
         }
 
         String token = authHeader.substring(7);
-        String username = jwtService.extractUsername(token);
+        String merchant_username = jwtService.extractUsername(token);
 
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = merchantService.loadUserByUsername(username);
-            if(jwtService.isValid(token, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities()
-                );
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
+        LOG.info("===== Inside Jwt-Merchant-Authentication-Filter ====" + merchant_username);
+
+        if(merchant_username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails merchantUserDetails = merchantService.loadUserByUsername(merchant_username);
+            if(jwtService.isValid(token, merchantUserDetails)) {
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(merchantUserDetails, null, merchantUserDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }

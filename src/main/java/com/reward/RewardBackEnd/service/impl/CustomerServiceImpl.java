@@ -1,6 +1,5 @@
 package com.reward.RewardBackEnd.service.impl;
 
-import com.reward.RewardBackEnd.controller.AuthController;
 import com.reward.RewardBackEnd.model.AuthenticationResponse;
 import com.reward.RewardBackEnd.model.Customer;
 import com.reward.RewardBackEnd.repository.CustomerRepository;
@@ -9,10 +8,11 @@ import com.reward.RewardBackEnd.service.securityServices.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -63,15 +63,29 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public AuthenticationResponse authenticate(Customer c) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        c.getCustEmail(),
-                        c.getPassword()
-                )
-        );
-        Customer cust = customerRepository.findByCustEmail(c.getUsername()).orElseThrow();
-        String token = jwtService.generateToken(cust);
-        return new AuthenticationResponse(token);
+        LOG.info(" === Inside CUSTOMER Service Impl to AUTHENTICATE === ");
+        LOG.info(" === Merchant Email: === " + c.getCustEmail() + " and Password: " + c.getPassword());
+        LOG.info(" === ======================= === ");
+        try {
+            UsernamePasswordAuthenticationToken customerToken = new UsernamePasswordAuthenticationToken(c.getUsername(), c.getPassword());
+            LOG.info("+++ UsernamePasswordAuthenticationToken passed +++");
+            authenticationManager.authenticate(customerToken);
+            LOG.info("+++ Authentication Manager passed +++");
+        } catch (AuthenticationException e) {
+            LOG.info(" +++ EXCEPTION +++ " + e.getMessage());
+            LOG.error(" +++ EXCEPTION +++ " + e.getMessage());
+            throw new RuntimeException("Authentication failed", e);
+        }
+        LOG.info(" === AUTHENTICATION MANAGER HAS BEEN PASSED === ");
+        LOG.info(" === Now, trying to log-in === ");
+        Optional<Customer> cust = customerRepository.findByCustEmail(c.getUsername());
+        if(cust.isPresent()) {
+            LOG.info(" === SUCCESSFULLY FOUND CUSTOMER TO LOGIN === " + cust.get().getCustEmail() + " and " + cust.get().getPassword());
+            String token = jwtService.generateToken(cust.get());
+            return new AuthenticationResponse(token);
+        }
+        LOG.info("========== No CUSTOMER is found for LOGGING IN ==========");
+        throw new UsernameNotFoundException("No CUSTOMER is found for LOGGING IN");
     }
 
     @Override
