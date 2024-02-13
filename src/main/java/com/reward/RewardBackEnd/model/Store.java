@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -38,7 +39,7 @@ public class Store {
 
 	private String country;
 
-	private LocalDate joinDate;
+	private LocalDateTime joinDate;
 
 	@OneToMany(mappedBy = "store")
 	private List<StoreCustomerRelation> storeCustomerRelation;

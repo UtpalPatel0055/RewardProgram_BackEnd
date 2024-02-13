@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 @NoArgsConstructor
 @Entity
 @Table(name = "merchant")
-public class Merchant extends User{
+public class Merchant extends User {
 
 	private String jobTitle;
 
