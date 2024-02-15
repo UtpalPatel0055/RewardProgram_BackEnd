@@ -13,12 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -39,7 +37,8 @@ public class UserController {
         return "Hello, Papa";
     }
 
-    @PostMapping("/token")
+    // LOGIN: For both; Merchant & Customer
+    @PostMapping("/users/login")
     public String login(@RequestBody User user) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -52,32 +51,36 @@ public class UserController {
         return token;
     }
 
-    // Customer
-    @PostMapping("/api/v1/customer/sign-up")
+    // Customer Sign-Up
+    @PostMapping("/customer/sign-up")
     public ResponseEntity<AuthenticationResponse> custSignUp(@RequestBody Customer customer) {
-        return null;
+        try {
+            LOG.info("=== Inside Customer Controller ===");
+            LOG.info("Merchant profile: " + customer.toString());
+            LOG.info("Database Merchant profile");
+            customerService.saveCustomer(customer);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch(Exception e) {
+            throw e;
+        }
     }
 
-    @PostMapping("/api/v1/customer/login")
-    public ResponseEntity<AuthenticationResponse> custLogin(@RequestBody Object obj) {
-        return null;
-    }
-
-
-    // Merchant
-    @PostMapping("/api/v1/merchants/sign-up")
+    // Merchant Sign-Up
+    @PostMapping("/merchants/sign-up")
     public ResponseEntity<AuthenticationResponse> signUp(@RequestBody Merchant merchant) {
-        //merchantService.saveMerchant(merchant);
-        return new ResponseEntity<>(HttpStatus.OK);
+          try {
+              LOG.info("=== Inside Merchant Controller ===");
+              LOG.info("Merchant profile: " + merchant.toString());
+              LOG.info("Database Merchant profile");
+              merchantService.saveMerchant(merchant);
+              return new ResponseEntity<>(HttpStatus.OK);
+          } catch(Exception e) {
+              throw e;
+          }
     }
 
-    @PostMapping("/api/v1/merchants/login")
-    public ResponseEntity login(@RequestBody Object obj) {
-        return null;
-    }
-
-    // Store
-    @PostMapping("/api/v1/stores/create-store-profile")
+    // Store Sign-Up
+    @PostMapping("/stores/create-store-profile")
     public ResponseEntity<Integer> createNewStore(@RequestBody Store store) {
         try {
             Store createdStore = storeService.saveStore(store);

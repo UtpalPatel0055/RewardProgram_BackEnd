@@ -16,15 +16,12 @@ public class MerchantController {
 
     private final MerchantService merchantService;
 
-    @PreAuthorize("hasRole('ROLE_MERCHANT')")
+
     @GetMapping("/dashboard")
     public String dashboard() {
         return "Merchant Dashboard";
     }
 
-    @GetMapping("/dashboard1")
-    public String dashboard1() {
-        return "Merchant Dashboard1";
-    }
+
 
 }
