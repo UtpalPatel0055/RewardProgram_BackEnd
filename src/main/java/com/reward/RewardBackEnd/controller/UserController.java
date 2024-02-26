@@ -1,6 +1,8 @@
 package com.reward.RewardBackEnd.controller;
 
 import com.reward.RewardBackEnd.model.*;
+import com.reward.RewardBackEnd.model.custom.MerchantLoginRequest;
+import com.reward.RewardBackEnd.model.custom.MerchantSignUpRequest;
 import com.reward.RewardBackEnd.service.CustomerService;
 import com.reward.RewardBackEnd.service.MerchantService;
 import com.reward.RewardBackEnd.service.StoreService;
@@ -14,6 +16,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.authentication.*;
+
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -37,21 +42,39 @@ public class UserController {
         return "Hello, Papa";
     }
 
-    // LOGIN: For both; Merchant & Customer
+    // LOGIN: Merchant
     @PostMapping("/users/login")
-    public String login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody Merchant merchantLoginRequest) {
+        LOG.info("Login Requested");
+        LOG.info("The member who wants to login: " + merchantLoginRequest.getEmail() + " " + merchantLoginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        user.getEmail(), user.getPassword()
+                        merchantLoginRequest.getEmail(), merchantLoginRequest.getPassword()
                 )
         );
         LOG.info("ROLE: " + authentication.getAuthorities());
         String token = tokenService.generateToken(authentication);
         LOG.info("Token Generated " + token);
-        return token;
+        return new ResponseEntity<>(new AuthenticationResponse(token), HttpStatus.OK);
     }
 
-    // Customer Sign-Up
+    // LOGIN: Customer
+    @PostMapping("/users/login")
+    public ResponseEntity<?> login(@RequestBody Customer customerLoginRequest) {
+        LOG.info("Login Requested");
+        LOG.info("The member who wants to login: " + customerLoginRequest.getEmail() + " " + customerLoginRequest.getPassword());
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        customerLoginRequest.getEmail(), customerLoginRequest.getPassword()
+                )
+        );
+        LOG.info("ROLE: " + authentication.getAuthorities());
+        String token = tokenService.generateToken(authentication);
+        LOG.info("Token Generated " + token);
+        return new ResponseEntity<>(new AuthenticationResponse(token), HttpStatus.OK);
+    }
+
+    // Sign-Up: Customer 
     @PostMapping("/customer/sign-up")
     public ResponseEntity<AuthenticationResponse> custSignUp(@RequestBody Customer customer) {
         try {
@@ -65,10 +88,30 @@ public class UserController {
         }
     }
 
-    // Merchant Sign-Up
+    // Sign-Up: Merchant 
     @PostMapping("/merchants/sign-up")
-    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody Merchant merchant) {
+    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody MerchantSignUpRequest requestedMerchant) {
           try {
+              if(requestedMerchant.getEmail() == null || requestedMerchant.getPhone() == null) {
+                  throw new BadCredentialsException("Empty form is not accepted");
+              }
+
+              int storeId = requestedMerchant.getStoreId();
+              if(storeId == 0) {
+                  throw new BadCredentialsException("Cannot allow Merchant without store");
+              }
+              Optional<Store> store = storeService.findByStoreId(storeId);
+              if(store.isEmpty()) {
+                  throw new BadCredentialsException("No associate store found as per the request");
+              }
+              Merchant merchant = new Merchant();
+              merchant.setStore(store.get());
+              merchant.setEmail(requestedMerchant.getEmail());
+              merchant.setFirstName(requestedMerchant.getFirstName());
+              merchant.setLastName(requestedMerchant.getLastName());
+              merchant.setPassword(requestedMerchant.getPassword());
+              merchant.setPhone(requestedMerchant.getPhone());
+//              merchant.set
               LOG.info("=== Inside Merchant Controller ===");
               LOG.info("Merchant profile: " + merchant.toString());
               LOG.info("Database Merchant profile");

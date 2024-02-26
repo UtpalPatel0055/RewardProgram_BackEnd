@@ -23,6 +23,11 @@ public class StoreServiceImpl implements StoreService {
     private StoreRepository storeRepository;
 
     @Override
+    public Optional<Store> findByStoreId(int storeId) {
+        return storeRepository.findById(storeId);
+    }
+
+    @Override
     public Store saveStore(Store store) {
         boolean flag = validateStoreBeforeSaving(store.getBusEmail(), store.getBusPhone());
         LOG.info("=== Inside Store Service ===");

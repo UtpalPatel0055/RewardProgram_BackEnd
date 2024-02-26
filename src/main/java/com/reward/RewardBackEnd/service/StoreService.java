@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface StoreService {
 
     Store saveStore(Store store);
+
+    Optional<Store> findByStoreId(int storeId);
 }
