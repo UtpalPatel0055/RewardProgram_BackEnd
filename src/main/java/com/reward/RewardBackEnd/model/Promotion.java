@@ -1,14 +1,13 @@
 package com.reward.RewardBackEnd.model;
 
-import java.time.LocalDate;
-import java.util.Date;
-
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-
 @Entity
 @Table(name="promotion")
 public class Promotion {
@@ -30,6 +29,6 @@ public class Promotion {
 	private Store store;
 	
 	@ManyToOne
-	@JoinColumn(name = "merchantId")
-	private Merchant merchant;
+	@JoinColumn(name = "userId")
+	private User user;
 }

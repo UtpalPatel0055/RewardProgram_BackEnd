@@ -1,14 +1,15 @@
 package com.reward.RewardBackEnd.model;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
-
 @Entity
 @Table(name="store")
 public class Store {
@@ -38,7 +39,7 @@ public class Store {
 
 	private String country;
 
-	private LocalDate joinDate;
+	private LocalDateTime joinDate;
 
 	@OneToMany(mappedBy = "store")
 	private List<StoreCustomerRelation> storeCustomerRelation;
