@@ -55,8 +55,9 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST,
-                                "/users/login", "/customers/sign-up",
-                                "/merchants/sign-up", "/stores/create-store-profile").permitAll()
+                                "/merchants/login","/customers/login",
+                                "/customers/sign-up", "/merchants/sign-up",
+                                "/stores/create-store-profile").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->

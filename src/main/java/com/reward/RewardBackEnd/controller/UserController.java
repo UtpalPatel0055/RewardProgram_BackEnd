@@ -1,7 +1,9 @@
 package com.reward.RewardBackEnd.controller;
 
-import com.reward.RewardBackEnd.model.*;
-import com.reward.RewardBackEnd.model.custom.MerchantLoginRequest;
+import com.reward.RewardBackEnd.model.AuthenticationResponse;
+import com.reward.RewardBackEnd.model.Customer;
+import com.reward.RewardBackEnd.model.Merchant;
+import com.reward.RewardBackEnd.model.Store;
 import com.reward.RewardBackEnd.model.custom.MerchantSignUpRequest;
 import com.reward.RewardBackEnd.service.CustomerService;
 import com.reward.RewardBackEnd.service.MerchantService;
@@ -13,10 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.authentication.*;
 
 import java.util.Optional;
 
@@ -43,7 +45,7 @@ public class UserController {
     }
 
     // LOGIN: Merchant
-    @PostMapping("/users/login")
+    @PostMapping("/merchants/login")
     public ResponseEntity<?> login(@RequestBody Merchant merchantLoginRequest) {
         LOG.info("Login Requested");
         LOG.info("The member who wants to login: " + merchantLoginRequest.getEmail() + " " + merchantLoginRequest.getPassword());
@@ -59,7 +61,7 @@ public class UserController {
     }
 
     // LOGIN: Customer
-    @PostMapping("/users/login")
+    @PostMapping("/customers/login")
     public ResponseEntity<?> login(@RequestBody Customer customerLoginRequest) {
         LOG.info("Login Requested");
         LOG.info("The member who wants to login: " + customerLoginRequest.getEmail() + " " + customerLoginRequest.getPassword());
@@ -77,6 +79,8 @@ public class UserController {
     // Sign-Up: Customer 
     @PostMapping("/customer/sign-up")
     public ResponseEntity<AuthenticationResponse> custSignUp(@RequestBody Customer customer) {
+        // Case **: Check what the data is coming into Customer object.
+        // Remark: we can apply validation on Front end to deal with data we want
         try {
             LOG.info("=== Inside Customer Controller ===");
             LOG.info("Merchant profile: " + customer.toString());
@@ -91,11 +95,15 @@ public class UserController {
     // Sign-Up: Merchant 
     @PostMapping("/merchants/sign-up")
     public ResponseEntity<AuthenticationResponse> signUp(@RequestBody MerchantSignUpRequest requestedMerchant) {
+          // Case **: Check what the data is coming into Customer object.
+          // Remark: we can apply validation on Front end to deal with data we want
           try {
               if(requestedMerchant.getEmail() == null || requestedMerchant.getPhone() == null) {
                   throw new BadCredentialsException("Empty form is not accepted");
               }
 
+              // Case 2: Merchant has to be complient with a store
+              // What if there is no store as per Merchant's request
               int storeId = requestedMerchant.getStoreId();
               if(storeId == 0) {
                   throw new BadCredentialsException("Cannot allow Merchant without store");
@@ -104,6 +112,7 @@ public class UserController {
               if(store.isEmpty()) {
                   throw new BadCredentialsException("No associate store found as per the request");
               }
+
               Merchant merchant = new Merchant();
               merchant.setStore(store.get());
               merchant.setEmail(requestedMerchant.getEmail());
@@ -111,7 +120,7 @@ public class UserController {
               merchant.setLastName(requestedMerchant.getLastName());
               merchant.setPassword(requestedMerchant.getPassword());
               merchant.setPhone(requestedMerchant.getPhone());
-//              merchant.set
+
               LOG.info("=== Inside Merchant Controller ===");
               LOG.info("Merchant profile: " + merchant.toString());
               LOG.info("Database Merchant profile");
